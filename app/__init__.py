@@ -77,6 +77,13 @@ def register_exception(app: FastAPI):
             content={"code": 500, "data": {"tip": "服务器错误"}, "message": "fail"},
         )
 
+    # 捕获断言错误，用于返回错误状态
+    @app.exception_handler(AssertionError)
+    async def asser_exception_handler(request: Request, exc: AssertionError):
+        logger.error(f"断言错误，URL：{request.url}, 此处条件不符合")
+        logger.info(f"------------------------{exc.args}")
+        state = exc.args[0] if exc.args else 0
+        return JSONResponse(res(state=state))
 
 def register_cors(app: FastAPI):
     """
