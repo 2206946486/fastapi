@@ -7,7 +7,7 @@
 @File    : courses.py
 @Software: PyCharm
 """
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, BackgroundTasks
 from sqlalchemy.orm import Session
 
 from app.tools.database import get_db
@@ -28,3 +28,13 @@ async def get_course_get(*, db: Session = Depends(get_db)):
 async def get_chapter_get(*, db: Session = Depends(get_db), course_id: int):
     data = db.query(Chapter).filter(Chapter.courseid == course_id).all()
     return res(data=data)
+
+
+def task(a):
+    print(a)
+
+
+@router.post('/background_tasks')
+async def background_tasks(framework: str, background_task: BackgroundTasks):
+    background_task.add_task(task, framework)
+    return res(msg="后台任务执行成功")

@@ -41,7 +41,7 @@ def create_app():
         api_router,
         prefix="/api/v1",
     )
-    app.mount(path='/static', app=StaticFiles(directory='./app/static', name='static'))  # 挂载静态文件
+    app.mount(path='/static', app=StaticFiles(directory='./app/static'), name='static')  # 挂载静态文件
     register_exception(app)  # 注册捕获异常信息
     register_cors(app)  # 跨域设置
     register_middleware(app)
